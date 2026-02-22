@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karakuri Studio — Digital Craftsmanship from Edo</title>
+
+<meta name="description" content="Karakuri Studio builds elegant single-purpose apps inspired by Hiraga Gennai — the Japanese Da Vinci. Digital mechanisms for modern life.">
+<meta name="keywords" content="karakuri, japanese apps, utility apps, indie developer, edo, hiraga gennai, minimalist apps, ios apps">
+<meta name="author" content="Karakuri Studio">
+
+<meta property="og:title" content="Karakuri Studio — Digital Craftsmanship from Edo">
+<meta property="og:description" content="Simple, single-purpose apps built with the spirit of Japanese Karakuri. Each app is a clever mechanism — one problem, one elegant solution.">
+<meta property="og:image" content="https://karakuri.studio/og-image.jpg">
+<meta property="og:url" content="[https://karakuri.studio](https://karakuri.studio/)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Karakuri Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Karakuri Studio — Digital Craftsmanship from Edo">
+<meta name="twitter:description" content="Single-purpose apps with the spirit of Edo-period ingenuity.">
+<meta name="twitter:image" content="https://karakuri.studio/og-image.jpg">
+
+<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com/)">
+<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com/)" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Shippori+Mincho+B1:wght@400;600;800&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================
+TOKENS
+===================== */
+:root {
+--sumi:   #0a0906;
+--sumi2:  #141109;
+--sumi3:  #1c1810;
+--washi:  #f5efe0;
+--washi2: #e0d8c4;
+--washi3: #c8bfa8;
+--kin:    #c9a84c;
+--kin2:   #e8c56a;
+--kin3:   #f5d880;
+--beni:   #c0392b;
+--beni2:  #e04030;
+--gin:    #8a9490;
+--border: rgba(201,168,76,0.14);
+--border2: rgba(201,168,76,0.28);
+
+```
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-ja:      'Shippori Mincho B1', serif;
+  --font-body:    'Noto Sans JP', sans-serif;
+}
+
+/* =====================
+   RESET & BASE
+===================== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--sumi);
+  color: var(--washi);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+
+/* Noise grain overlay */
+body::before {
+  content:'';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='<http://www.w3.org/2000/svg>' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9000;
+}
+
+/* =====================
+   TYPOGRAPHY
+===================== */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.t-ja {
+  font-family: var(--font-ja);
+}
+.t-label {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--kin);
+}
+
+/* =====================
+   LAYOUT
+===================== */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+section { padding: 120px 0; }
+
+.section-header {
+  margin-bottom: 64px;
+}
+.section-eyebrow {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--kin);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-eyebrow::after {
+  content:'';
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--kin), transparent);
+  opacity: 0.4;
+}
+
+/* =====================
+   NAV
+===================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 8000;
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(10,9,6,0.95) 0%, transparent 100%);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(201,168,76,0.07);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.nav-gear {
+  width: 36px; height: 36px;
+  animation: spinCW 12s linear infinite;
+}
+
+.nav-brand {
+  display: flex;
+  flex-direction: column;
+}
+.nav-brand-en {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--washi);
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+.nav-brand-ja {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  color: var(--kin);
+  letter-spacing: 4px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-ja);
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--washi3);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.nav-links a:hover { color: var(--kin2); }
+
+.nav-cta {
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--kin);
+  border: 1px solid var(--border2);
+  padding: 8px 22px;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.nav-cta:hover {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--kin2);
+  color: var(--kin2);
+}
+
+/* =====================
+   HERO
+===================== */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 80px;
+  padding-top: 140px;
+  padding-bottom: 80px;
+}
+
+.hero-left { position: relative; }
+
+.hero-eyebrow {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--kin);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hero-eyebrow::before {
+  content:'';
+  width: 32px; height: 1px;
+  background: var(--kin);
+  opacity: 0.6;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--kin2);
+}
+
+.hero-title-ja {
+  font-family: var(--font-ja);
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 600;
+  color: var(--washi2);
+  letter-spacing: 6px;
+  margin-bottom: 40px;
+  display: block;
+}
+
+.hero-desc {
+  font-size: 16px;
+  color: rgba(245,239,224,0.58);
+  max-width: 480px;
+  line-height: 1.85;
+  margin-bottom: 48px;
+}
+.hero-desc strong { color: var(--washi); font-weight: 400; }
+
+/* CTA buttons */
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 64px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: var(--sumi);
+  background: var(--kin);
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: all 0.25s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--kin2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(201,168,76,0.25);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 2px;
+  color: var(--kin);
+  border: 1px solid var(--border2);
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.btn-secondary:hover {
+  background: rgba(201,168,76,0.07);
+  border-color: var(--kin2);
+  color: var(--kin2);
+}
+
+/* Hero stats */
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 300;
+  color: var(--kin2);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--gin);
+  text-transform: uppercase;
+}
+
+/* Hero right: gear illustration */
+.hero-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.gear-system {
+  position: relative;
+  width: 440px;
+  height: 440px;
+}
+
+/* Watermark Japanese text */
+.hero-watermark {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-ja);
+  font-size: 120px;
+  font-weight: 800;
+  color: rgba(201,168,76,0.04);
+  writing-mode: vertical-rl;
+  letter-spacing: 8px;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* =====================
+   MARQUEE
+===================== */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: rgba(201,168,76,0.025);
+  overflow: hidden;
+  padding: 16px 0;
+}
+.marquee-track {
+  display: flex;
+  gap: 0;
+  animation: marqueeRun 40s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  font-family: var(--font-ja);
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: var(--kin);
+  opacity: 0.6;
+  padding: 0 48px;
+}
+.marquee-sep {
+  font-size: 11px;
+  color: var(--beni);
+  opacity: 0.5;
+  padding: 0 4px;
+}
+
+@keyframes marqueeRun {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* =====================
+   PHILOSOPHY
+===================== */
+#philosophy { background: var(--sumi2); }
+
+.phil-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.phil-item {
+  background: var(--sumi2);
+  padding: 48px;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.phil-item::before {
+  content:'';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--kin);
+  transition: height 0.4s ease;
+}
+.phil-item:hover::before { height: 100%; }
+.phil-item:hover { background: rgba(201,168,76,0.03); }
+
+.phil-num {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 300;
+  color: rgba(201,168,76,0.08);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.phil-ja {
+  font-family: var(--font-ja);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 5px;
+  color: var(--washi);
+  margin-bottom: 6px;
+}
+.phil-en {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--kin2);
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+.phil-body {
+  font-size: 13px;
+  color: rgba(245,239,224,0.5);
+  line-height: 1.9;
+}
+.phil-body-ja {
+  font-family: var(--font-ja);
+  font-size: 11px;
+  color: rgba(245,239,224,0.3);
+  margin-top: 10px;
+  letter-spacing: 2px;
+}
+
+/* =====================
+   APPS GRID
+===================== */
+#apps { }
+
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.app-card {
+  background: var(--sumi2);
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.app-card::after {
+  content:'';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.3s;
+  pointer-events: none;
+}
+.app-card:hover { background: var(--sumi3); }
+.app-card:hover::after { border-color: rgba(201,168,76,0.3); }
+
+/* Corner ornament */
+.app-card::before {
+  content:'';
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-top: 32px solid rgba(201,168,76,0.06);
+  border-left: 32px solid transparent;
+  transition: border-color 0.3s;
+}
+.app-card:hover::before {
+  border-top-color: rgba(201,168,76,0.15);
+}
+
+.app-link-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.app-icon-box {
+  width: 52px; height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  border: 1px solid rgba(201,168,76,0.15);
+  margin-bottom: 20px;
+  position: relative;
+}
+.app-icon-gear {
+  position: absolute;
+  bottom: -6px; right: -6px;
+  width: 16px; height: 16px;
+  opacity: 0.5;
+}
+
+.app-name-ja {
+  font-family: var(--font-ja);
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--washi2);
+  margin-bottom: 3px;
+}
+.app-name-en {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--washi);
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.app-desc {
+  font-size: 12px;
+  color: rgba(245,239,224,0.42);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.app-status {
+  display: inline-block;
+  font-family: var(--font-ja);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid;
+}
+.status-live    { color: #4caf88; border-color: rgba(76,175,136,0.3); background: rgba(76,175,136,0.06); }
+.status-dev     { color: var(--kin); border-color: var(--border); }
+.status-planned { color: var(--gin); border-color: rgba(138,148,144,0.2); }
+
+/* App card store badge (visible on hover) */
+.app-store-hint {
+  position: absolute;
+  bottom: 20px; right: 20px;
+  font-family: var(--font-ja);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--kin);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.app-card:hover .app-store-hint { opacity: 0.7; }
+
+/* =====================
+   STORY / ABOUT GENNAI
+===================== */
+#story {
+  background: var(--sumi2);
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.story-quote {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--washi);
+  line-height: 1.35;
+  margin-bottom: 24px;
+  position: relative;
+  padding-left: 28px;
+  border-left: 2px solid var(--kin);
+}
+.story-quote-source {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--kin);
+  padding-left: 28px;
+  margin-bottom: 40px;
+}
+.story-body {
+  font-size: 14px;
+  color: rgba(245,239,224,0.52);
+  line-height: 2;
+  margin-bottom: 16px;
+}
+.story-body strong { color: var(--washi2); font-weight: 400; }
+
+/* Gennai info card */
+.gennai-card {
+  border: 1px solid var(--border);
+  background: var(--sumi);
+  padding: 48px;
+}
+.gennai-label {
+  font-family: var(--font-ja);
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: var(--kin);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.gennai-name-ja {
+  font-family: var(--font-ja);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: 8px;
+  color: var(--washi);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.gennai-name-en {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--kin2);
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+}
+.gennai-facts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.gennai-fact {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: rgba(245,239,224,0.5);
+  line-height: 1.7;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.gennai-fact:last-child { border-bottom: none; padding-bottom: 0; }
+.fact-icon {
+  font-size: 16px;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+.fact-label {
+  font-family: var(--font-ja);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--kin);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* =====================
+   BRAND KIT
+===================== */
+.brand-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+.brand-card {
+  border: 1px solid var(--border);
+  background: var(--sumi2);
+  padding: 32px;
+}
+.brand-card-title {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--kin);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+/* Palette */
+.palette-swatches {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.swatch-color {
+  width: 36px; height: 36px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.swatch-info { font-size: 11px; }
+.swatch-name { color: var(--washi2); letter-spacing: 1px; }
+.swatch-hex  { color: var(--gin); font-size: 10px; letter-spacing: 2px; font-family: monospace; }
+
+/* Typography preview */
+.type-sample { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.type-sample:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.type-label-small {
+  font-family: var(--font-ja);
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: var(--gin);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* =====================
+   FOOTER
+===================== */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 64px 0;
+  background: var(--sumi);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 80px;
+  align-items: end;
+}
+
+.footer-haiku {
+  font-family: var(--font-ja);
+  font-size: 18px;
+  letter-spacing: 6px;
+  color: rgba(245,239,224,0.25);
+  line-height: 2.2;
+}
+.footer-copy {
+  font-family: var(--font-ja);
+  font-size: 10px;
+  color: var(--gin);
+  letter-spacing: 3px;
+  line-height: 2;
+  text-align: right;
+}
+
+/* =====================
+   ANIMATIONS
+===================== */
+@keyframes spinCW  { to { transform: rotate(360deg);  } }
+@keyframes spinCCW { to { transform: rotate(-360deg); } }
+@keyframes gearPulse {
+  0%,100% { filter: drop-shadow(0 0 6px rgba(201,168,76,0.35)); }
+  50%     { filter: drop-shadow(0 0 16px rgba(201,168,76,0.7)); }
+}
+@keyframes corePulse {
+  0%,100% { opacity: 0.85; transform: scale(1);    }
+  50%     { opacity: 1;    transform: scale(1.08); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.fade-up { animation: fadeUp 0.8s ease both; }
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+.delay-4 { animation-delay: 0.8s; }
+
+/* =====================
+   UTILITIES
+===================== */
+.text-kin  { color: var(--kin2); }
+.text-beni { color: var(--beni); }
+.text-gin  { color: var(--gin);  }
+.mt-4  { margin-top: 16px; }
+.mt-8  { margin-top: 32px; }
+.mb-8  { margin-bottom: 32px; }
+.ornament {
+  display: flex; align-items: center; gap: 24px;
+  margin: 80px 0; opacity: 0.25;
+}
+.orn-line { flex: 1; height: 1px; background: var(--kin); }
+.orn-mark { font-family: var(--font-ja); font-size: 22px; color: var(--kin); }
+
+/* Responsive basics */
+@media (max-width: 960px) {
+  #hero { grid-template-columns: 1fr; padding-top: 120px; }
+  .hero-right { display: none; }
+  .apps-grid { grid-template-columns: repeat(2,1fr); }
+  .phil-grid { grid-template-columns: 1fr; }
+  .story-grid { grid-template-columns: 1fr; }
+  .brand-grid { grid-template-columns: 1fr; }
+  .container { padding: 0 24px; }
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+}
+
+```
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<a href="#" class="nav-logo">
+<svg class="nav-gear" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+<circle cx="30" cy="30" r="22" fill="none" stroke="#c9a84c" stroke-width="2"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(45,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(90,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(135,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(180,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(225,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(270,30,30)"/>
+<rect x="26" y="4"  width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(315,30,30)"/>
+<line x1="30" y1="13" x2="30" y2="47" stroke="#c9a84c" stroke-width="1.5"/>
+<line x1="13" y1="30" x2="47" y2="30" stroke="#c9a84c" stroke-width="1.5"/>
+<circle cx="30" cy="30" r="6" fill="#c0392b"/>
+<circle cx="30" cy="30" r="3" fill="#ff7060" opacity="0.8"/>
+</svg>
+<div class="nav-brand">
+<span class="nav-brand-en">Karakuri Studio</span>
+<span class="nav-brand-ja">からくりスタジオ</span>
+</div>
+</a>
+
+<ul class="nav-links">
+<li><a href="#apps">Apps</a></li>
+<li><a href="#philosophy">Philosophy</a></li>
+<li><a href="#story">Story</a></li>
+<li><a href="#brand">Brand</a></li>
+</ul>
+
+<a href="[https://apps.apple.com](https://apps.apple.com/)" class="nav-cta" target="_blank">View on App Store →</a>
+
+</nav>
+
+<div class="container">
+<section id="hero">
+<div class="hero-left">
+<div class="hero-eyebrow fade-up">
+Edo-era ingenuity · Digital craftsmanship
+</div>
+
+```
+  <h1 class="hero-title fade-up delay-1">
+    Digital<br>
+    <em>Karakuri</em><br>
+    for Modern Life.
+  </h1>
+
+  <span class="hero-title-ja fade-up delay-2">現代生活のための、からくり。</span>
+
+  <p class="hero-desc fade-up delay-2">
+    Inspired by <strong>Hiraga Gennai</strong> — the Japanese Da Vinci — we build
+    elegant single-purpose apps. Each one is a <strong>clever mechanism</strong>:
+    one problem, one solution, no bloat.
+  </p>
+
+  <div class="hero-ctas fade-up delay-3">
+    <a href="#apps" class="btn-primary">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M5 7h4M7 5l2 2-2 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+      Explore Apps
+    </a>
+    <a href="#story" class="btn-secondary">The Karakuri Story</a>
+  </div>
+
+  <div class="hero-stats fade-up delay-4">
+    <div>
+      <div class="stat-num">30<span style="font-size:0.5em;color:var(--gin)">+</span></div>
+      <div class="stat-label">Apps Planned</div>
+    </div>
+    <div>
+      <div class="stat-num">1</div>
+      <div class="stat-label">Release / Week</div>
+    </div>
+    <div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Curiosity</div>
+    </div>
+  </div>
+</div>
+
+<div class="hero-right fade-up delay-2">
+  <div class="gear-system">
+    <svg width="440" height="440" viewBox="0 0 440 440" xmlns="<http://www.w3.org/2000/svg>">
+      <defs>
+        <radialGradient id="gCenter" cx="50%" cy="50%">
+          <stop offset="0%"   stop-color="#c0392b" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#8a1a1a" stop-opacity="0.6"/>
+        </radialGradient>
+        <filter id="heroGlow">
+          <feGaussianBlur stdDeviation="4" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <g transform="translate(220,220)"
+         style="animation:spinCW 28s linear infinite;transform-box:fill-box;transform-origin:center;"
+         filter="url(#heroGlow)">
+        <circle r="208" fill="none" stroke="rgba(201,168,76,0.12)" stroke-width="2"/>
+        <circle r="200" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="1"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(0)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(22.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(45)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(67.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(90)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(112.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(135)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(157.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(180)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(202.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(225)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(247.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(270)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(292.5)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(315)"/>
+        <rect x="-5" y="-213" width="10" height="14" rx="2" fill="#c9a84c" opacity="0.5" transform="rotate(337.5)"/>
+      </g>
+
+      <g transform="translate(220,220)"
+         style="animation:spinCCW 16s linear infinite;transform-box:fill-box;transform-origin:center;"
+         filter="url(#heroGlow)">
+        <circle r="148" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="2"/>
+        <line x1="0"    y1="-140" x2="0"    y2="140"  stroke="rgba(201,168,76,0.12)" stroke-width="1.5"/>
+        <line x1="-140" y1="0"    x2="140"  y2="0"    stroke="rgba(201,168,76,0.12)" stroke-width="1.5"/>
+        <line x1="-99"  y1="-99"  x2="99"   y2="99"   stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+        <line x1="99"   y1="-99"  x2="-99"  y2="99"   stroke="rgba(201,168,76,0.08)" stroke-width="1"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(0)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(30)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(60)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(90)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(120)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(150)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(180)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(210)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(240)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(270)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(300)"/>
+        <rect x="-5" y="-153" width="10" height="12" rx="2" fill="#c9a84c" opacity="0.7" transform="rotate(330)"/>
+      </g>
+
+      <g transform="translate(220,220)"
+         style="animation:spinCW 8s linear infinite;transform-box:fill-box;transform-origin:center;"
+         filter="url(#heroGlow)" style="animation:gearPulse 3s ease-in-out infinite, spinCW 8s linear infinite;">
+        <circle r="80" fill="rgba(10,9,6,0.8)" stroke="#c9a84c" stroke-width="2.5"/>
+        <circle r="56" fill="none" stroke="rgba(201,168,76,0.3)" stroke-width="1" stroke-dasharray="5 4"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(0)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(45)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(90)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(135)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(180)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(225)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(270)"/>
+        <rect x="-6" y="-86" width="12" height="12" rx="2" fill="#c9a84c" transform="rotate(315)"/>
+        <line x1="0"   y1="-56" x2="0"   y2="56"  stroke="#c9a84c" stroke-width="2"/>
+        <line x1="-56" y1="0"   x2="56"  y2="0"   stroke="#c9a84c" stroke-width="2"/>
+        <line x1="-40" y1="-40" x2="40"  y2="40"  stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="40"  y1="-40" x2="-40" y2="40"  stroke="#c9a84c" stroke-width="1.5"/>
+        <circle r="24" fill="url(#gCenter)"
+          style="animation:corePulse 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center;"/>
+        <circle r="12" fill="#ff5040" opacity="0.7"/>
+        <circle r="5"  fill="#ffb0a0" opacity="0.9"/>
+      </g>
+
+      <text x="22" y="290"
+        font-family="serif" font-size="160" font-weight="800"
+        fill="rgba(201,168,76,0.03)"
+        style="writing-mode:horizontal-tb;">
+        仕掛
+      </text>
+    </svg>
+  </div>
+
+  <div class="hero-watermark">からくり仕掛け発明</div>
+</div>
+
+```
+
+</section>
+</div>
+
+<div class="marquee-wrap">
+<div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<div class="container">
+<section id="apps">
+<div class="section-header">
+<div class="section-eyebrow">The Mechanisms · 仕掛け一覧</div>
+<h2 class="t-display" style="font-size:clamp(36px,4vw,56px); font-weight:300; margin-bottom:16px;">
+Single-purpose.<br><em>Obsessively crafted.</em>
+</h2>
+<p style="font-size:14px; color:rgba(245,239,224,0.45); max-width:520px; line-height:1.9;">
+Each app is a karakuri — a clever mechanism with a single job.
+No subscriptions. No dark patterns. Just the mechanism you need.
+</p>
+</div>
+
+```
+<div class="apps-grid" id="appsGrid"></div>
+
+```
+
+</section>
+</div>
+
+<div class="ornament container">
+<div class="orn-line"></div>
+<div class="orn-mark">⚙</div>
+<div class="orn-line"></div>
+</div>
+
+<section id="philosophy">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">Gennai's Teachings · 源内の教え</div>
+<h2 class="t-display" style="font-size:clamp(36px,4vw,56px); font-weight:300; margin-bottom:16px;">
+The Way of the<br><em>Karakuri Maker</em>
+</h2>
+</div>
+
+```
+<div class="phil-grid">
+  <div class="phil-item">
+    <div class="phil-num">01</div>
+    <div class="phil-ja">まず動かせ</div>
+    <div class="phil-en">Build & Ship First</div>
+    <div class="phil-body">
+      Release the core mechanism before perfecting it.
+      A working gadget in someone's hands teaches more than a year of planning.
+      Polish comes after utility proves its worth.
+    </div>
+    <div class="phil-body-ja">完璧な設計より、動く仕掛けを。磨くのは後じゃ。</div>
+  </div>
+
+  <div class="phil-item">
+    <div class="phil-num">02</div>
+    <div class="phil-ja">隙間を狙え</div>
+    <div class="phil-en">Target the Overlooked Gap</div>
+    <div class="phil-body">
+      Gennai invented the thermometer in Japan. Not because it was obvious,
+      because nobody else saw the need. The best mechanism solves problems
+      the market forgot to solve.
+    </div>
+    <div class="phil-body-ja">誰も気づかない隙間に、一番大きな宝がある。</div>
+  </div>
+
+  <div class="phil-item">
+    <div class="phil-num">03</div>
+    <div class="phil-ja">すぐ見切れ</div>
+    <div class="phil-en">Kill Fast, Move On</div>
+    <div class="phil-body">
+      Not every mechanism earns its keep. A karakuri that gathers dust is
+      worse than no karakuri at all. Ship, measure, decide quickly.
+      Attachment to failing work is the enemy of invention.
+    </div>
+    <div class="phil-body-ja">動かぬ仕掛けを抱えるな。次の発明へ進め。</div>
+  </div>
+
+  <div class="phil-item">
+    <div class="phil-num">04</div>
+    <div class="phil-ja">物語で売れ</div>
+    <div class="phil-en">Sell the Story, Not the Spec</div>
+    <div class="phil-body">
+      Gennai didn't sell technical manuals. He performed, he dramatized,
+      he made people feel the electricity. Your app's best feature
+      is the story of the problem it solves — not the feature list.
+    </div>
+    <div class="phil-body-ja">仕掛けは語って初めて、人の心を動かす。</div>
+  </div>
+</div>
+
+```
+
+</div>
+</section>
+
+<section id="story">
+<div class="container">
+<div class="section-header">
+<div class="section-eyebrow">The Inspiration · ブランドの源泉</div>
+</div>
+
+```
+<div class="story-grid">
+  <div>
+    <blockquote class="story-quote">
+      "He who creates nothing original merely tastes the dregs of others."
+    </blockquote>
+    <p class="story-quote-source">— Hiraga Gennai, c.1764</p>
+
+    <p class="story-body">
+      In 18th-century Edo, <strong>Hiraga Gennai</strong> was an anomaly —
+      a scientist, inventor, writer, and entrepreneur who refused to be
+      confined by the rigid social structures of his time.
+    </p>
+    <p class="story-body">
+      He built <strong>Japan's first electrostatic generator</strong> (Elekiteru),
+      pioneered Western-style oil painting, invented thermometers, and wrote
+      satirical novels under pen names. He was, in every sense,
+      <strong>the Japanese Da Vinci</strong>.
+    </p>
+    <p class="story-body">
+      Karakuri Studio exists to carry that spirit forward —
+      building clever mechanisms for modern problems,
+      one small app at a time.
+    </p>
+
+    <div style="margin-top:40px;">
+      <a href="#apps" class="btn-secondary">See the Mechanisms →</a>
+    </div>
+  </div>
+
+  <div class="gennai-card">
+    <div class="gennai-label">Inventor Profile · 発明家</div>
+    <div class="gennai-name-ja">平賀源内</div>
+    <div class="gennai-name-en">Hiraga Gennai, 1728–1780</div>
+
+    <ul class="gennai-facts">
+      <li class="gennai-fact">
+        <span class="fact-icon">⚡</span>
+        <span>
+          <span class="fact-label">Elekiteru · エレキテル</span>
+          Built Japan's first electrostatic generator in 1770, demonstrating electricity to stunned Edo crowds.
+        </span>
+      </li>
+      <li class="gennai-fact">
+        <span class="fact-icon">🌡</span>
+        <span>
+          <span class="fact-label">Thermometer · 寒暖計</span>
+          Pioneered thermometer production in Japan — solving a problem nobody had named yet.
+        </span>
+      </li>
+      <li class="gennai-fact">
+        <span class="fact-icon">🎨</span>
+        <span>
+          <span class="fact-label">Oil Painting · 洋画</span>
+          First Japanese practitioner of Western oil painting techniques.
+        </span>
+      </li>
+      <li class="gennai-fact">
+        <span class="fact-icon">📅</span>
+        <span>
+          <span class="fact-label">Viral Marketing · 土用の丑の日</span>
+          Invented "Doyo no Ushi no Hi" — the first recorded viral marketing campaign. Unagi sales still peak every July because of him.
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+```
+
+</div>
+</section>
+
+<div class="ornament container">
+<div class="orn-line"></div>
+<div class="orn-mark">⊕</div>
+<div class="orn-line"></div>
+</div>
+
+<div class="container">
+<section id="brand">
+<div class="section-header">
+<div class="section-eyebrow">Brand Identity · ブランド資料</div>
+<h2 class="t-display" style="font-size:clamp(36px,4vw,56px); font-weight:300; margin-bottom:16px;">
+Visual<br><em>Language</em>
+</h2>
+</div>
+
+```
+<div class="brand-grid">
+  <div class="brand-card">
+    <div class="brand-card-title">Logo · ロゴ</div>
+    <div style="background:var(--sumi); padding:32px; text-align:center; margin-bottom:12px; border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+        <svg width="36" height="36" viewBox="0 0 60 60" style="animation:spinCW 12s linear infinite;">
+          <circle cx="30" cy="30" r="22" fill="none" stroke="#c9a84c" stroke-width="2"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(45,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(90,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(135,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(180,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(225,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(270,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#c9a84c" transform="rotate(315,30,30)"/>
+          <line x1="30" y1="13" x2="30" y2="47" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="13" y1="30" x2="47" y2="30" stroke="#c9a84c" stroke-width="1.5"/>
+          <circle cx="30" cy="30" r="6" fill="#c0392b"/>
+          <circle cx="30" cy="30" r="3" fill="#ff7060" opacity="0.8"/>
+        </svg>
+        <div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--washi);letter-spacing:2px;">Karakuri Studio</div>
+          <div style="font-family:var(--font-ja);font-size:10px;color:var(--kin);letter-spacing:4px;">からくりスタジオ</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--washi); padding:24px; text-align:center; border:1px solid rgba(0,0,0,0.1);">
+      <div style="display:flex;align-items:center;gap:12px;justify-content:center;">
+        <svg width="28" height="28" viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="22" fill="none" stroke="#0a0906" stroke-width="2"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(45,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(90,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(135,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(180,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(225,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(270,30,30)"/>
+          <rect x="26" y="4" width="8" height="8" rx="1.5" fill="#0a0906" transform="rotate(315,30,30)"/>
+          <line x1="30" y1="13" x2="30" y2="47" stroke="#0a0906" stroke-width="1.5"/>
+          <line x1="13" y1="30" x2="47" y2="30" stroke="#0a0906" stroke-width="1.5"/>
+          <circle cx="30" cy="30" r="6" fill="#c0392b"/>
+        </svg>
+        <div>
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:600;color:#0a0906;letter-spacing:2px;">Karakuri Studio</div>
+          <div style="font-family:var(--font-ja);font-size:9px;color:#8a5a1a;letter-spacing:4px;">からくりスタジオ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-card">
+    <div class="brand-card-title">Color Palette · カラー</div>
+    <div class="palette-swatches">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0a0906;"></div>
+        <div class="swatch-info"><div class="swatch-name">墨 Sumi</div><div class="swatch-hex">#0A0906</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#c9a84c;border:1px solid rgba(255,255,255,0.1);"></div>
+        <div class="swatch-info"><div class="swatch-name">金 Kin</div><div class="swatch-hex">#C9A84C</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#e8c56a;"></div>
+        <div class="swatch-info"><div class="swatch-name">金明 Kinmei</div><div class="swatch-hex">#E8C56A</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#c0392b;"></div>
+        <div class="swatch-info"><div class="swatch-name">朱 Beni</div><div class="swatch-hex">#C0392B</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#f5efe0;"></div>
+        <div class="swatch-info"><div class="swatch-name">和紙 Washi</div><div class="swatch-hex">#F5EFE0</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#8a9490;"></div>
+        <div class="swatch-info"><div class="swatch-name">銀 Gin</div><div class="swatch-hex">#8A9490</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="brand-card">
+    <div class="brand-card-title">Typography · 書体</div>
+
+    <div class="type-sample">
+      <div class="type-label-small">Display — English</div>
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:300;color:var(--washi);line-height:1.2;">
+        Karakuri<br><em style="color:var(--kin2);">Mechanism</em>
+      </div>
+      <div style="font-family:var(--font-ja);font-size:9px;color:var(--gin);letter-spacing:2px;margin-top:4px;">Cormorant Garamond Light / Italic</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="type-label-small">見出し — 日本語</div>
+      <div style="font-family:var(--font-ja);font-size:22px;font-weight:800;letter-spacing:6px;color:var(--washi);">
+        からくり仕掛け
+      </div>
+      <div style="font-family:var(--font-ja);font-size:9px;color:var(--gin);letter-spacing:2px;margin-top:4px;">しっぽり明朝 Bold</div>
+    </div>
+
+    <div class="type-sample">
+      <div class="type-label-small">Body — 本文</div>
+      <div style="font-family:var(--font-body);font-size:12px;font-weight:300;color:rgba(245,239,224,0.5);line-height:1.8;">
+        One problem, one solution. Each app is a mechanism — no more, no less.
+      </div>
+      <div style="font-family:var(--font-ja);font-size:9px;color:var(--gin);letter-spacing:2px;margin-top:4px;">Noto Sans JP Light</div>
+    </div>
+  </div>
+</div>
+
+```
+
+</section>
+</div>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div>
+<div class="footer-haiku">
+仕掛けひとつ<br>
+また仕掛けひとつ<br>
+積み上がる
+</div>
+<div style="font-family:var(--font-display);font-size:12px;font-style:italic;color:rgba(245,239,224,0.2);margin-top:16px;letter-spacing:2px;">
+One mechanism at a time, the studio grows.
+</div>
+</div>
+<div class="footer-copy">
+<div style="font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--kin);letter-spacing:2px;margin-bottom:12px;">Karakuri Studio</div>
+<div>からくりスタジオ</div>
+<div style="margin-top:12px;">Inspired by Hiraga Gennai, 1728–1780</div>
+<div>© 2026 Karakuri Studio. All rights reserved.</div>
+<div style="margin-top:16px; display:flex; gap:20px; justify-content:flex-end;">
+<a href="#" style="color:var(--gin);text-decoration:none;font-size:9px;letter-spacing:2px;transition:color 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#8a9490'">TWITTER / X</a>
+<a href="#" style="color:var(--gin);text-decoration:none;font-size:9px;letter-spacing:2px;transition:color 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#8a9490'">TIKTOK</a>
+<a href="#" style="color:var(--gin);text-decoration:none;font-size:9px;letter-spacing:2px;transition:color 0.2s;" onmouseover="this.style.color='#c9a84c'" onmouseout="this.style.color='#8a9490'">APP STORE</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+/* ── Marquee content ── */
+const marqueeItems = [
+{ text: 'Digital Karakuri', ja: 'デジタルからくり' },
+{ text: 'Ship Weekly',      ja: '週1リリース' },
+{ text: 'Edo Ingenuity',    ja: '江戸の知恵' },
+{ text: 'Single Purpose',   ja: '一機能一解決' },
+{ text: 'No Bloat',         ja: '余計なものは作らない' },
+{ text: 'Kill Fast',        ja: '執着するな' },
+{ text: 'The Japanese Da Vinci', ja: '平賀源内' },
+{ text: 'Modern Mechanism', ja: '現代の仕掛け' },
+];
+
+const track = document.getElementById('marqueeTrack');
+// Duplicate for seamless loop
+[...marqueeItems, ...marqueeItems].forEach(item => {
+const el = document.createElement('span');
+el.innerHTML = `<span class="marquee-item">${item.text}</span><span class="marquee-sep">⊕</span><span class="marquee-item" style="font-family:'Shippori Mincho B1',serif;">${item.ja}</span><span class="marquee-sep">·</span>`;
+track.appendChild(el);
+});
+
+/* ── Apps data ── */
+const apps = [
+{
+ja: '水抜き',
+en: 'Water Eject',
+desc: 'Sonic wave technology to expel water from your speaker grille. A modern digital exorcism for that annoying splash.',
+status: 'Available',
+statusClass: 'status-live',
+icon: '💧',
+color: '#0d2a3a',
+url: '[https://apps.apple.com](https://apps.apple.com/)',
+},
+{
+ja: '照度計',
+en: 'Lux Sense',
+desc: 'Precision light meter for your home, studio, or greenhouse. Know exactly what your plants — and eyes — are getting.',
+status: 'Available',
+statusClass: 'status-live',
+icon: '🌿',
+color: '#0d2218',
+url: '[https://apps.apple.com](https://apps.apple.com/)',
+},
+{
+ja: '音番人',
+en: 'Sound Guard',
+desc: 'Real-time decibel monitor with smart alerts. Protect your hearing at concerts, construction sites, and noisy offices.',
+status: 'In Development',
+statusClass: 'status-dev',
+icon: '🔊',
+color: '#1e1220',
+url: '#',
+},
+{
+ja: '運命計算',
+en: 'Gacha Calc',
+desc: 'Honest probability calculator for gacha games. Know your real odds before you tap. Math doesn\'t lie; loot boxes do.',
+status: 'In Development',
+statusClass: 'status-dev',
+icon: '🎲',
+color: '#1e1808',
+url: '#',
+},
+{
+ja: '請求書',
+en: 'Invoice Pad',
+desc: 'Minimal invoice generator for freelancers. Create, send, and track in under 60 seconds. No subscriptions ever.',
+status: 'Planned',
+statusClass: 'status-planned',
+icon: '📄',
+color: '#121620',
+url: '#',
+},
+{
+ja: '番方帳',
+en: 'Shift Log',
+desc: 'Dead-simple shift tracker for hourly workers. Log hours, calculate pay, export in one tap. Edo-era simplicity.',
+status: 'Planned',
+statusClass: 'status-planned',
+icon: '🗂',
+color: '#1a1008',
+url: '#',
+},
+];
+
+const grid = document.getElementById('appsGrid');
+apps.forEach(app => {
+const card = document.createElement('div');
+card.className = 'app-card';
+
+const linkHtml = app.url !== '#'
+? `<a href="${app.url}" class="app-link-overlay" target="_blank" rel="noopener" aria-label="Open ${app.en} on App Store"></a>`
+: '';
+
+card.innerHTML =     `${linkHtml}     <div class="app-icon-box" style="background:${app.color};">       <span>${app.icon}</span>       <svg class="app-icon-gear" viewBox="0 0 24 24" xmlns="<http://www.w3.org/2000/svg>">         <circle cx="12" cy="12" r="8" fill="none" stroke="#c9a84c" stroke-width="1.2"/>         <rect x="10.5" y="2" width="3" height="3" rx="0.5" fill="#c9a84c" transform="rotate(0,12,12)"/>         <rect x="10.5" y="2" width="3" height="3" rx="0.5" fill="#c9a84c" transform="rotate(90,12,12)"/>         <rect x="10.5" y="2" width="3" height="3" rx="0.5" fill="#c9a84c" transform="rotate(180,12,12)"/>         <rect x="10.5" y="2" width="3" height="3" rx="0.5" fill="#c9a84c" transform="rotate(270,12,12)"/>         <circle cx="12" cy="12" r="2.5" fill="#c0392b"/>       </svg>     </div>     <div class="app-name-ja">${app.ja}</div>     <div class="app-name-en">${app.en}</div>     <div class="app-desc">${app.desc}</div>     <span class="app-status ${app.statusClass}">${app.status}</span>     ${app.url !== '#' ? '<span class="app-store-hint">App Store →</span>' : ''}`  ;
+grid.appendChild(card);
+});
+
+/* ── Scroll fade-in ── */
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.style.opacity = '1';
+entry.target.style.transform = 'translateY(0)';
+}
+});
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.app-card, .phil-item, .gennai-fact, .brand-card').forEach(el => {
+el.style.opacity = '0';
+el.style.transform = 'translateY(20px)';
+el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+observer.observe(el);
+});
+</script>
+
+</body>
+</html>
